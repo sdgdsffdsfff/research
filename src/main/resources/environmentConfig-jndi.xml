@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<environmentConfig>
+	<configuration>
+		<debugMode name="debugMode" value="false"/>
+		<configType name="configType" value="JNDI"/> 
+		<!-- 支持aop切入的类，目前只支持spring3和log4j对占位符的处理,多个类可以用“,”分割 -->
+		<aopConfig name="aop" value="Spring3,log4j"/>
+		<dataSources>
+			<jdbc>
+			</jdbc>
+			<jndi>
+				<property name="resRefName" value="java:comp/env/jdbc/EnvconfigDB"/>
+				<property name="system" value="CEC"/>
+			</jndi>
+		</dataSources>
+	</configuration>
+	<configParams>
+		
+	</configParams>
+</environmentConfig>

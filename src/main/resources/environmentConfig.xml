@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<environmentConfig>
+	<configuration>
+		<!-- supportted configuration type: JDBC,XML,JNDI-->
+		<!-- 
+		<configType name="configType" value="JDBC"/> 
+		-->
+		<configType name="configType" value="XML"/>
+		<!-- 支持aop切入的类，目前只支持spring3和log4j对占位符的处理,多个类可以用“,”分割 -->
+		<aopConfig name="aop" value="Spring3"/>
+		<dataSources>
+			<jdbc>
+				<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+				<property name="system" value="CEC"/>
+				<property name="url" value="jdbc:mysql://172.16.30.54:3306/db_cec2?useUnicode=true&amp;characterEncoding=utf-8"/>
+				<property name="username" value="root"/>
+				<property name="password" value="111111"/>
+			</jdbc>
+			<jndi>
+				<property name="resRefName" value="java:comp/env/jdbc/EnvconfigDB"/>
+				<property name="system" value="CEC"/>
+			</jndi>
+		</dataSources>
+	</configuration>
+	<configParams>
+		<config name="logger.home" value="C:/cecLogs" remark = "log文件夹目录地址"/>
+        <config name="logger.debug.level" value="ERROR" remark = "Debug_all appender的log级别"/>
+        <config name="logger.console.level" value="ERROR" remark = "console appender的log级别"/>
+
+        <config name="jdbc.driver" value="com.mysql.jdbc.Driver" remakr="数据库驱动"/>
+		<config name="jdbc.schema" value="cec_db" remark="数据库schema" />
+
+		<!-- <config name="jdbc.url" value="jdbc:mysql://172.16.30.43:3306/db_cec2?useUnicode=true&amp;characterEncoding=utf-8" remark="数据连接url" />
+		<config name="jdbc.user" value="root" remark="数据库用户" />
+		<config name="jdbc.password" value="111111" remark="数据库密码" /> -->
+        
+        <config name="jdbc.url" value="jdbc:mysql://192.168.137.128:3306/activemq?useUnicode=true&amp;characterEncoding=utf-8" remark="数据连接url" />
+        <config name="jdbc.user" value="activemq" remark="数据库用户" />
+        <config name="jdbc.password" value="activemq" remark="数据库密码" />
+        
+        <config name="active.mq.url" value="tcp://192.168.137.128:61616" remark="MQ URL" />
+        <!-- <config name="active.mq.url" value="tcp://172.16.30.85:61616" remark="MQ URL" /> -->
+        <!-- <config name="active.mq.url" value="tcp://121.196.132.135:30002" remark="MQ URL" /> -->
+        
+        <config name="active.mq.connections" value="5" remark="MQ连接数" />
+        <config name="active.mq.cec.cec.order" value="cec.cec.order" remark="MQ正常队列名称" />
+        <config name="active.mq.cec.wmc.order" value="cec.wmc.order" remark="MQ重新路由队列名称" />
+        <config name="active.mq.concurrent.consumers" value="1" remark="consumer最小数" />
+        <config name="active.mq.max.concurrent.consumers" value="5" remark="consumer最大数" />
+        
+        <config name="active.mq.producer.session.thread" value="1" remark="每个connection 产生的最大session数量" />
+        <config name="active.mq.consumer.session.thread" value="1" remark="每个connection 产生的最大session数量" />
+        
+        <!-- 测试淘宝聚石塔队列 -->
+        <config name="active.mq.cec.test.wmc.order" value="fpx.cec.test.WmcOrderQueue" remark="聚石塔wmc订单测试队列" />
+	</configParams>
+</environmentConfig>

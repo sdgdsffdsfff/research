@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.camel.mybatis.Price">
+
+    <resultMap id="PriceMap" type="com.camel.activemq.BASE.domain.Price" extends="Entity.baseMap">
+        <result property="id" column="id"/>
+        <result property="userid" column="userid"/>
+        <result property="price" column="price"/>
+        <result property="createDate" column="create_date"/>
+    </resultMap>
+    
+    <sql id="columns">
+        <![CDATA[
+        id, userid, price,create_date
+        ]]>
+    </sql>
+
+    <sql id="where">
+        <where>
+           <if test="@Ognl@isNotEmpty(id)">
+                AND id = #{id}
+            </if>
+           <if test="@Ognl@isNotEmpty(userid)">
+                AND userid = #{userid}
+            </if>
+           <if test="@Ognl@isNotEmpty(price)">
+                AND price = #{price}
+            </if>
+        </where>
+    </sql>
+    
+    <select id="getById" resultMap="PriceMap">
+        SELECT <include refid="columns" />
+        <![CDATA[
+            FROM
+                price
+            WHERE 
+                id = #{id} 
+        ]]>
+    </select>
+
+    <select id="search" resultMap="PriceMap">
+        SELECT
+            <include refid="columns" />
+        FROM
+            price 
+        <include refid="where"/>
+    </select>
+        
+    <select id="getCount" resultType="long">
+        <![CDATA[
+            SELECT
+                count(1)
+            FROM
+                price
+        ]]>
+        <include refid="where"/>
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            INSERT INTO price (
+                userid,
+                price,
+                create_date
+            ) VALUES (
+                #{userid},
+                #{price},
+                now()
+            )
+        ]]>
+    </insert>
+
+    <update id="update">
+        <![CDATA[
+            UPDATE
+                price
+            SET
+                userid = #{userid},
+                price = #{price}
+            WHERE 
+                id = #{id}
+        ]]>
+    </update>
+    
+    <delete id="deleteByPk">
+        <![CDATA[
+            DELETE
+            FROM
+                price
+            WHERE
+                id = #{id} 
+        ]]>
+    </delete>
+</mapper>
+

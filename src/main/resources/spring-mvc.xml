@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util/spring-util-4.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/task  
+		http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+	<!-- 扫描页面控制器  -->
+	<context:component-scan base-package="com.camel.**.controller" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+    
+    <!-- 扫描websocket配置类   -->
+    <!-- <context:component-scan base-package="com.camel.springwebsocket.*" use-default-filters="false">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan> -->
+
+	<!-- 处理器映射 -->  
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+	
+	<!-- 处理器适配器 -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">  
+		<property name="messageConverters">
+			<list>
+				<ref bean="jsonConverter"/>
+			</list>
+		</property>
+	</bean> 
+	
+	<!-- json转换 -->
+	<bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="objectMapper" ref="jacksonObjectMapper"/>
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+				<value>application/json;charset=utf-8</value>
+			</list>
+		</property>
+	</bean>    
+    
+     <!-- 定义jackson配置 -->
+    <util:constant id="non_null" static-field="com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL"/>
+    <util:constant id="local_zh_cn" static-field="java.util.Locale.SIMPLIFIED_CHINESE"/>
+    <bean id="jacksonDateFormat" class="java.text.SimpleDateFormat">
+        <constructor-arg index="0" type="String" value="yyyy-MM-dd HH:mm:ss"/>
+        <constructor-arg index="1" type="java.util.Locale" value="local_zh_cn"/>
+    </bean>
+    <bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"
+        p:serializationInclusion-ref="non_null"
+        p:dateFormat-ref="jacksonDateFormat"
+    />
+	
+	<!-- 拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+    		<mvc:mapping path="/**/*" /> 
+			<bean class="com.camel.framework.interceptor.SharedRenderVariableInterceptor"/>
+    	</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+      <property name="basename" value="exception-msg"/>
+      <property name="useCodeAsDefaultMessage" value="true"/>
+    </bean>
+    
+    <!-- spring MVC 框架异常处理类 -->
+    <bean id="exceptionResolver" class="com.camel.framework.common.base.TopHandlerExceptionResolver"> 
+    </bean>
+    
+    <bean id="viewResolverJsp" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+        <property name="prefix" value="/WEB-INF/views/"/>  
+        <property name="suffix" value=".jsp"/>  
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/> 
+    </bean>
+	
+</beans>

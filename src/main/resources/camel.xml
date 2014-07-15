@@ -1,0 +1,74 @@
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+  http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://camel.apache.org/schema/spring
+  http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <camelContext id="camelReroute" trace="false" xmlns="http://camel.apache.org/schema/spring">
+        <!-- define the default error handler, and refer to a redelivery policy to use-->
+        <errorHandler id="eh" type="TransactionErrorHandler">
+          <redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="1000" retryAttemptedLogLevel="WARN" />
+        </errorHandler> 
+
+        <!-- setup endpoint -->
+        <endpoint id="dead" uri="broker:queue:test.dead"/>
+
+                <onException>
+              <exception>javax.jms.JMSException</exception>
+              <redeliveryPolicy maximumRedeliveries="2" redeliveryDelay="1000" retryAttemptedLogLevel="WARN"/>
+              <to uri="broker:queue:wmc.dead"/>
+        </onException>
+        <route id="routeAboveQueue">
+            <from uri="remoteJms:queue:fpx.cec.test.WmcOrderQueue"/>
+            <to uri="broker:queue:wmc.wmc.order"/>
+            
+    <!--
+            <choice>
+                <when>
+                    <spel>#{@destinationView.queueSize >= 100}</spel>
+                    <to uri="broker:queue:test.camel"/>
+                </when>
+                <otherwise>
+                    <to uri="broker:queue:test.broker.queue"/>
+                </otherwise>
+            </choice>
+    -->
+        </route>
+
+    </camelContext>
+    <!--
+    <bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+      <property name="connectionFactory" ref="jmsConnectionFactory" />
+    </bean>
+    -->
+    <!-- using activemq connection pools -->
+    <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+       <property name="brokerURL" value="tcp://121.196.132.135:30002" />
+    </bean>
+    <!-- -->
+    <bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
+       <property name="maxConnections" value="20" />
+       <property name="connectionFactory" ref="jmsConnectionFactory" />
+    </bean>
+
+     <!--
+    <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+       <property name="connectionFactory" ref="pooledConnectionFactory"/>
+       <property name="concurrentConsumers" value="10"/>
+    </bean>
+     -->
+     <!-- config componest or endpoint -->
+    <bean id="remoteJms" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="connectionFactory" ref="pooledConnectionFactory"/>
+       
+        <!-- if we are using transacted then enable CACHE_CONSUMER (if not using XA) to run faster
+             see more details at: http://camel.apache.org/jms
+            <property name="cacheLevelName" value="CACHE_CONSUMER" />
+        <property name="transacted" value="true"/>
+        <property name="transactionManager" ref="jmsTransactionManager"/>
+        -->
+    </bean>
+</beans>

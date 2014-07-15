@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p" xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/task  
+        http://www.springframework.org/schema/task/spring-task-4.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+    default-autowire="byName">
+
+    <description>ActiveMQ配置</description>
+    
+    <!-- 配置producer JMS连接工厂 -->
+    <bean id="producerConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+        destroy-method="stop">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL">
+                    <value>${active.mq.url}</value>
+                </property>
+                <!-- 每个connection 产生的最大session数量 
+                <property name="maxThreadPoolSize" value="${active.mq.producer.session.thread}" />
+                -->
+            </bean>
+        </property>
+        <property name="maxConnections" value="1"></property>
+    </bean>
+    
+    <bean id="producerJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="producerConnectionFactory"></property>
+    </bean>
+    
+    <!-- 配置consumer JMS连接工厂 -->
+    <bean id="consumerConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+        destroy-method="stop">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL">
+                    <value>${active.mq.url}</value>
+                </property>
+                <!-- 每个connection 产生的最大session数量 -->
+                <property name="maxThreadPoolSize" value="5" />
+                
+            </bean>
+        </property>
+        <property name="maxConnections" value="2"></property>
+    </bean>
+    
+    <!-- consumer 队列监听器 -->
+   <!--  <bean id="cecOrderMessageListenerContainer"
+        class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="consumerConnectionFactory"></property>
+        <property name="concurrentConsumers" value="${active.mq.concurrent.consumers}" />
+        <property name="maxConcurrentConsumers" value="${active.mq.max.concurrent.consumers}" />
+        <property name="destination" ref="cecOrderQueue"></property>
+        <property name="messageListener" ref="demoBusinessListener"></property>
+    </bean> -->
+    
+    
+    <!-- cec 订单队列，这里的数据将做业务处理保存本地数据库  -->
+    <!-- <bean id="cecOrderQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="${active.mq.cec.cec.order}" />
+    </bean> -->
+    
+    <!-- consumer 队列监听器 -->
+    <!-- <bean id="wmcOrderMessageListenerContainer"
+        class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="consumerConnectionFactory"></property>
+        <property name="concurrentConsumers" value="${active.mq.concurrent.consumers}" />
+        <property name="maxConcurrentConsumers" value="${active.mq.max.concurrent.consumers}" />
+        <property name="destination" ref="wmcOrderQueue"></property>
+        <property name="messageListener" ref="demoBusinessListener"></property>
+    </bean> -->
+    
+    <!-- wmc 订单队列，这里的数据将通过camel路由至远程wmc的MQ上 -->
+    <!-- <bean id="wmcOrderQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        设置消息队列的名字
+        <constructor-arg index="0" value="${active.mq.cec.wmc.order}" />
+    </bean> -->
+    
+    <!-- consumer 队列监听器 -->
+    <bean id="testOrderMessageListenerContainer_1"
+        class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="consumerConnectionFactory"></property>
+        <property name="concurrentConsumers" value="${active.mq.concurrent.consumers}" />
+        <property name="maxConcurrentConsumers" value="${active.mq.max.concurrent.consumers}" />
+        <property name="destination" ref="testOrderQueue_1"></property>
+        <property name="messageListener" ref="demoBusinessListener"></property>
+    </bean>
+    
+    <!-- cec 订单队列，这里的数据将做业务处理保存本地数据库  -->
+    <bean id="testOrderQueue_1" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="test_1" />
+    </bean>
+    
+    <!-- consumer 队列监听器 -->
+    <bean id="testOrderMessageListenerContainer_2"
+        class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="consumerConnectionFactory"></property>
+        <property name="concurrentConsumers" value="${active.mq.concurrent.consumers}" />
+        <property name="maxConcurrentConsumers" value="${active.mq.max.concurrent.consumers}" />
+        <property name="destination" ref="testOrderQueue_2"></property>
+        <property name="messageListener" ref="demoBusinessListener"></property>
+    </bean>
+    
+    <!-- cec 订单队列，这里的数据将做业务处理保存本地数据库  -->
+    <bean id="testOrderQueue_2" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="test_2" />
+    </bean>
+    
+    <!-- consumer 队列监听器 -->
+    <bean id="testOrderMessageListenerContainer_3"
+        class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="consumerConnectionFactory"></property>
+        <property name="concurrentConsumers" value="${active.mq.concurrent.consumers}" />
+        <property name="maxConcurrentConsumers" value="${active.mq.max.concurrent.consumers}" />
+        <property name="destination" ref="testOrderQueue_3"></property>
+        <property name="messageListener" ref="demoBusinessListener"></property>
+    </bean>
+    
+    <!-- cec 订单队列，这里的数据将做业务处理保存本地数据库  -->
+    <bean id="testOrderQueue_3" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="test_3" />
+    </bean>
+    
+    <!-- consumer 队列监听器 -->
+    <bean id="testOrderMessageListenerContainer_4"
+        class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="consumerConnectionFactory"></property>
+        <property name="concurrentConsumers" value="${active.mq.concurrent.consumers}" />
+        <property name="maxConcurrentConsumers" value="${active.mq.max.concurrent.consumers}" />
+        <property name="destination" ref="testOrderQueue_4"></property>
+        <property name="messageListener" ref="demoBusinessListener"></property>
+    </bean>
+    
+    <!-- cec 订单队列，这里的数据将做业务处理保存本地数据库  -->
+    <bean id="testOrderQueue_4" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="test_4" />
+    </bean>
+    
+    <!-- consumer 队列监听器 -->
+    <bean id="testOrderMessageListenerContainer_5"
+        class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="consumerConnectionFactory"></property>
+        <property name="concurrentConsumers" value="${active.mq.concurrent.consumers}" />
+        <property name="maxConcurrentConsumers" value="${active.mq.max.concurrent.consumers}" />
+        <property name="destination" ref="testOrderQueue_5"></property>
+        <property name="messageListener" ref="demoBusinessListener"></property>
+    </bean>
+    
+    <!-- cec 订单队列，这里的数据将做业务处理保存本地数据库  -->
+    <bean id="testOrderQueue_5" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="test_5" />
+    </bean>
+    
+</beans>
