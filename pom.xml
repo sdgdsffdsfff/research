@@ -29,6 +29,10 @@
         <mybatis-spring.version>1.2.1</mybatis-spring.version>
         <spring-data-mongodb.version>1.4.0.RELEASE</spring-data-mongodb.version>
         
+        <freemarker.version>2.3.20</freemarker.version>
+        <!-- jmockit test -->
+        <jmockit.version>1.9</jmockit.version>
+        
 	</properties>
 	<dependencies>
        <dependency>
@@ -200,6 +204,12 @@
 			<version>3.1</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.jmockit</groupId>
+            <artifactId>jmockit</artifactId>
+            <version>${jmockit.version}</version>
+            <scope>test</scope>
+        </dependency>
 		<!-- ################## Junit dependancy end ################## -->
 		<!-- aop dependancy start -->
 		<dependency>
@@ -211,12 +221,12 @@
         <dependency>
           <groupId>org.drools</groupId>
           <artifactId>drools-core</artifactId>
-          <version>6.0.1.Final</version>
+          <version>6.1.0.Final</version>
         </dependency>
         <dependency>
           <groupId>org.drools</groupId>
           <artifactId>drools-compiler</artifactId>
-          <version>6.0.1.Final</version>
+          <version>6.1.0.Final</version>
         </dependency>
         
         <dependency>
@@ -235,6 +245,12 @@
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
             <version>${mybatis-spring.version}</version>
+        </dependency>
+        
+        <dependency>
+          <groupId>org.freemarker</groupId>
+          <artifactId>freemarker</artifactId>
+          <version>${freemarker.version}</version>
         </dependency>
 	</dependencies>
 	<build>

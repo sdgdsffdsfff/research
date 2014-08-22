@@ -4,23 +4,21 @@
  */
 package inte.com.camel.drools.expert;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kie.internal.KnowledgeBase;
-import org.kie.internal.command.CommandFactory;
 import org.kie.internal.runtime.StatelessKnowledgeSession;
 
 import com.camel.drools.expert.Applicant;
 import com.camel.drools.expert.Application;
 import com.camel.drools.expert.RuleBase;
-import com.camel.framework.utils.DateUtils;
 
 
 /**
@@ -45,7 +43,7 @@ public class ApplicantTest {
         Date start = new Date();
         System.out.println(start.getTime());
         Applicant applicant = new Applicant("Mr John Smith",16);
-        Application application = new Application();
+        Application application = new Application(new Date(2014,8,15));
         
         assertTrue(application.isValid());
         //执行规则后，会将valid改为false

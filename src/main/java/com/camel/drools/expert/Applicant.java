@@ -12,10 +12,17 @@ package com.camel.drools.expert;
 public class Applicant {
     private String name;
     private int age;
+    private String sex;
     
     public Applicant(String name, int age){
         this.name = name;
         this.age = age;
+    }
+    
+    public Applicant(String name, int age, String sex){
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
     }
 
     public String getName() {
@@ -32,5 +39,13 @@ public class Applicant {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

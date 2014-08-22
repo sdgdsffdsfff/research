@@ -1,0 +1,24 @@
+package inte.com.camel.drools.expert
+
+import com.camel.drools.expert.Applicant;
+import com.camel.drools.expert.Application;
+
+rule "Is of valid age"
+when
+    it has an applicant with sex is M
+    if age greater than 18 accept applicant
+    else reject applicant
+then
+    there is an applicant 
+then[accept]
+    accept applicant "bob"
+then[reject]
+    reject applicant "bob" because your age less than 18
+end
+
+rule "Application was made this year"
+when
+    applied after 2014-08-01
+then
+    reject application of "bob"
+end

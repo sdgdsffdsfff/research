@@ -15,6 +15,10 @@ public class Application {
     private Date dateApplied;
     private boolean valid = true;
     
+    public Application(Date dateApplied){
+        this.dateApplied = dateApplied;
+    }
+    
     public Date getDateApplied() {
         return dateApplied;
     }

@@ -1,0 +1,18 @@
+package com.camel.drools.expert.sample
+
+import com.camel.drools.expert.sample.domain.Item;
+import com.camel.drools.expert.sample.domain.ERPCondition;
+
+global java.util.List relistingItems;
+
+rule "ebay return policy"
+when
+    there is an ERPCondition with
+    there is an item with
+    - item price greater than price of ERPCondition
+    - item saledNum greater than 50
+    - item status equals erp_status
+then
+    print it
+    this item should be relisting
+end
