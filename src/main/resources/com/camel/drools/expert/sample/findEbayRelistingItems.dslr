@@ -12,6 +12,7 @@ when
     - item price greater than price of ERPCondition
     - item saledNum greater than 50
     - item status equals erp_status
+    
 then
     print it
     this item should be relisting

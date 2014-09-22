@@ -17,7 +17,16 @@ public class Order {
     private String source;
     private String currency;
     private List<Item> items;
+    private String destination;
     
+    public Order(){
+    }
+    
+    public Order(double amount, String source, String destination){
+        this.amount = amount;
+        this.source = source;
+        this.destination = destination;
+    }
     public String getOrderId() {
         return orderId;
     }
@@ -47,6 +56,12 @@ public class Order {
     }
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+    public String getDestination() {
+        return destination;
+    }
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
     
 }

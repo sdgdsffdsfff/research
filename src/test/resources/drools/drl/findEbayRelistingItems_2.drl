@@ -1,0 +1,15 @@
+package com.camel.drools.expert.sample.exam2
+
+import com.camel.drools.expert.sample.domain.Item;
+import com.camel.drools.expert.sample.domain.ERPCondition;
+
+global java.util.List relistingItems;
+
+rule "ebay return policy"
+when
+    $b:ERPCondition(price > 10)
+    $a:Item(price>$b.price)
+then
+    System.out.println($a.getTitle()+ " is meet requirement in exam2");
+    relistingItems.add($a);
+end

@@ -143,6 +143,7 @@ public class EbayRelistingByRuleService {
         kSession.insert(cond);
         
         kSession.fireAllRules();
+        kSession.dispose();
         logUtils.afterRun("execute rules");
         return relistingItems;
     } 

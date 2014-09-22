@@ -1,0 +1,17 @@
+package com.camel.drools.expert.sample.drl1
+
+import com.camel.drools.expert.sample.domain.Order;
+import com.camel.drools.expert.sample.domain.Item;
+import com.camel.drools.expert.sample.domain.UserRule;
+
+import function com.camel.drools.expert.sample.utils.DroolsOrderFunction.itemIdExistInCondition;
+
+rule "order flow drl1"
+    salience 100
+when
+    $userRule:UserRule($rc:ruleCondition)
+    $order:Order($rc.getList("destIncludes") contains destination, amount==$rc.getDouble("amount"), source==$rc.getString("source"))
+    
+then
+    System.out.println("finished rule for " + $userRule.getUserCode());
+end

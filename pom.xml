@@ -7,8 +7,6 @@
 	<packaging>war</packaging>
 
 	<properties>
-
-		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.0.0.RELEASE</spring.version>
 		<jackson.version>2.1.1</jackson.version>
@@ -33,6 +31,13 @@
         <!-- jmockit test -->
         <jmockit.version>1.9</jmockit.version>
         
+        <drools.version>6.1.0.Final</drools.version>
+        <kie-spring.version>6.1.0.Final</kie-spring.version>
+        
+        <sdo.version>2.1.1</sdo.version>
+        <eclipselink.version>2.5.2-M1</eclipselink.version>
+        
+        <jetty.version>9.1.0.v20131115</jetty.version>
 	</properties>
 	<dependencies>
        <dependency>
@@ -40,6 +45,16 @@
           <artifactId>fpx-envconfig-util</artifactId>
           <version>1.3.0</version>
           <classifier>Release</classifier>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>1.7.7</version>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+          <version>1.7.7</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -111,6 +126,11 @@
         <dependency>
           <groupId>org.springframework</groupId>
           <artifactId>spring-jdbc</artifactId>
+          <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-context-support</artifactId>
           <version>${spring.version}</version>
         </dependency>
         <!-- =============spring 支持websocket ======================= -->
@@ -221,12 +241,27 @@
         <dependency>
           <groupId>org.drools</groupId>
           <artifactId>drools-core</artifactId>
-          <version>6.1.0.Final</version>
+          <version>${drools.version}</version>
         </dependency>
         <dependency>
           <groupId>org.drools</groupId>
           <artifactId>drools-compiler</artifactId>
-          <version>6.1.0.Final</version>
+          <version>${drools.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.kie</groupId>
+          <artifactId>kie-spring</artifactId>
+          <version>${kie-spring.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>javax.inject</groupId>
+          <artifactId>javax.inject</artifactId>
+          <version>1</version>
+        </dependency>
+        <dependency>
+          <groupId>org.kie</groupId>
+          <artifactId>kie-ci</artifactId>
+          <version>${kie-spring.version}</version>
         </dependency>
         
         <dependency>
@@ -252,6 +287,18 @@
           <artifactId>freemarker</artifactId>
           <version>${freemarker.version}</version>
         </dependency>
+        
+        <!-- =============sdo相关jar======================= -->
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>com.springsource.commonj.sdo</artifactId>
+                <version>${sdo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>eclipselink</artifactId>
+                <version>${eclipselink.version}</version>
+            </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -282,26 +329,19 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>maven-jetty-plugin</artifactId>
-				<version>6.1.26</version>
-				<configuration>
-					<stopKey>${project.groupId}:${project.artifactId}:${project.version}</stopKey>
-					<stopPort>5599</stopPort>
-					<webAppConfig>
-						<contextPath>/</contextPath>
-						<defaultsDescriptor>src/main/resources/webdefault.xml</defaultsDescriptor>
-					</webAppConfig>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<connectors>
-						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-							<port>8080</port>
-							<maxIdleTime>60000</maxIdleTime>
-						</connector>
-					</connectors>
-				</configuration>
-			</plugin>
+				<!-- jetty插件 -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <configuration>
+                    <scanIntervalSeconds>0</scanIntervalSeconds>
+                     <httpConnector>
+                        <port>8080</port>
+                        <idleTimeout>6000</idleTimeout>
+                     </httpConnector>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 </project>

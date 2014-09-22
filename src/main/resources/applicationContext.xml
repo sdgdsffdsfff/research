@@ -61,4 +61,5 @@
     </bean>
     
     <import resource="applicationContext-activemq.xml"/>
+    <import resource="applicationContext-drools.xml"/>
 </beans>

@@ -1,0 +1,14 @@
+package com.camel.drools.expert.sample.order2
+
+import com.camel.drools.expert.sample.domain.Order;
+import com.camel.drools.expert.sample.domain.UserRule;
+
+global java.util.List matchOrders;
+
+rule "order control"
+when
+    $userRule:UserRule($rc:ruleCondition)
+    $order:Order($rc.getList("destIncludes") contains destination, amount==$rc.getDouble("amount"), source==$rc.getString("source"))
+then
+    System.out.println("finished rule for order 2 " + $userRule.getUserCode());
+end

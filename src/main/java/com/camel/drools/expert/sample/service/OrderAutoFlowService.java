@@ -4,10 +4,9 @@
  */
 package com.camel.drools.expert.sample.service;
 
-import static org.junit.Assert.assertFalse;
-
+import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -15,19 +14,19 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
-import org.drools.compiler.compiler.DroolsParserException;
-import org.drools.compiler.compiler.PackageBuilderErrors;
+import javax.annotation.Resource;
+
+import org.apache.commons.io.FileUtils;
 import org.drools.compiler.lang.dsl.DSLMappingFile;
 import org.drools.compiler.lang.dsl.DSLTokenizedMappingFile;
 import org.drools.compiler.lang.dsl.DefaultExpander;
 import org.drools.core.impl.InternalKnowledgeBase;
-import org.kie.internal.KnowledgeBaseFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
-import com.camel.drools.expert.sample.domain.OrderAutoFlowRule;
+import com.camel.drools.expert.sample.domain.UserRule;
+import com.camel.drools.expert.sample.utils.FMTemplateExceptionHandler;
 
-import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -36,65 +35,69 @@ import freemarker.template.TemplateException;
  * @author dengqb
  * @date 2014年8月21日
  */
+@Service
 public class OrderAutoFlowService {
-
-    @Autowired
-    private InternalKnowledgeBase kBase;
+    @Resource
+    private FreeMarkerConfigurer freemarkerConfig;
     
-    private String drlStr;
+    private Template template;
     
+    private InternalKnowledgeBase kBase = KBaseContext.getKBaseInstance();
     
-    private String dslPath;
-    
-    private String dslFtlName;
-    
-    public String getDrlStr() {
-        return drlStr;
-    }
-
-    public void setDrlStr(String drlStr) {
-        this.drlStr = drlStr;
-    }
-
-    public String getDslPath() {
-        return dslPath;
-    }
-
-    public void setDslPath(String dslPath) {
-        this.dslPath = dslPath;
-    }
-
-    public String getDslFtlName() {
-        return dslFtlName;
-    }
-
-    public void setDslFtlName(String dslFtlName) {
-        this.dslFtlName = dslFtlName;
-    }
-
     /**
-     * 获取FreeMarker Template
-     * 场景：成功
-     * @return 
+     * DSL文件的路径
      */
-    public Template getTemplate(Configuration cfg, String ftlFile) {
-        Template temp = null;
+    private String dslFilePath = "/drools/orderAutoFlowRules.dsl";
+    
+    /**
+     * dslr freemarker template文件名称
+     */
+    private String dslrFtlName = "orderAutoFlowRules.dslr.ftl";
+    /**
+     * 存储生成的DRL的文件夹
+     */
+    private String drlDirPath = "/drools/drl/";
+    
+    public void createDrlFile(UserRule userRule){
+        //获取freemarker 模板
+        Template temp = getTemplate(dslrFtlName);
+        //由freemarker模板生成dslr字符串
+        String dslr = generDslrFromFtlFile(userRule,temp);
+        System.out.println(dslr);
+        final Reader dslReader = new InputStreamReader(this.getClass().getResourceAsStream(dslFilePath));
+        
+        String drl = getDrlFromDsl(new StringReader(dslr),dslReader);
+        System.out.println(drl);
+        File file = new File(KBaseContext.getClassPath()+drlDirPath+ userRule.getUserCode()+".drl");
         try {
-            temp = cfg.getTemplate(ftlFile);
+            FileUtils.writeStringToFile(file, drl);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return temp;
+    }
+    /**
+     * 获取FreeMarker Template
+     * @return 
+     */
+    public Template getTemplate(String ftlFile) {
+        if (template == null){
+            try {
+                freemarkerConfig.getConfiguration().setTemplateExceptionHandler(new FMTemplateExceptionHandler());
+                template = freemarkerConfig.getConfiguration().getTemplate(ftlFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return template;
     }
 
     /**
      * 由FreeMarker文件生成drools dslr文件
-     * @param oafr 
+     * @param oafr 用户选择的规则参数对象
      */
-    public String generDslrFromFtlFile(OrderAutoFlowRule oafr, Template temp) {
+    public String generDslrFromFtlFile(UserRule userRule, Template temp) {
         Map root = new HashMap();
-        root.put("orderAutoFlowRule", oafr);
-//        Writer out = new OutputStreamWriter(System.out);
+        root.put("userRule", userRule);
         Writer out = new StringWriter();
         try {
             temp.process(root, out);
@@ -120,48 +123,13 @@ public class OrderAutoFlowService {
             expander.addDSLMapping(dslFile.getMapping());
             drl = expander.expand(dslrReader);
             dslrReader.close();
+            if (expander.hasErrors()){
+                throw new RuntimeException("expanding drl from dslr error");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return drl;
-    }
-
-    /**
-     * 获取Kbase，如果没有则创建
-     * @param drlStr
-     * @return
-     */
-    public InternalKnowledgeBase getKBase() {
-        if (kBase == null){
-            kBase = createKBase(drlStr);
-        }
-        return kBase;
-    }
-    
-    /**
-     * 创建kBase
-     * @param drlStr
-     * @return
-     */
-    public InternalKnowledgeBase createKBase(String drlStr) {
-        kBase = (InternalKnowledgeBase) KnowledgeBaseFactory.newKnowledgeBase();
-        KnowledgeBuilderImpl builder = new KnowledgeBuilderImpl();
-        try {
-            builder.addPackageFromDrl(new StringReader(drlStr));
-            boolean hasError = builder.hasErrors();
-            if(hasError){
-                PackageBuilderErrors errors = builder.getErrors();
-                for (int i=0; i<errors.size();i++){
-                    System.out.println(errors.get(i).toString());
-                }
-                throw new RuntimeException("building drools package errors");
-            }
-        } catch (DroolsParserException | IOException e) {
-            e.printStackTrace();
-        }
-        kBase.addPackage(builder.getPackage());
-        
-        return kBase;
     }
     
 }

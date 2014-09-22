@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" targetNamespace="http://drools.research.com/xsd/RuleCondition"
+	xmlns:ur="http://drools.research.com/xsd/RuleCondition">
+        
+	<xs:element name="RuleCondition">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="minPrice" type="xs:double" />
+				<xs:element name="source" type="xs:string" />
+                <xs:element name="dest" type="xs:string" />
+				<!-- <xs:element name="destIncludes" type="xs:string" minOccurs="0" maxOccurs="unbounded" /> -->
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

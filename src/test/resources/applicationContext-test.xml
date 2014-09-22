@@ -59,4 +59,6 @@
     </context:component-scan>
 
 	<task:annotation-driven/>
+    
+    <import resource="applicationContext-drools-test.xml"/>
 </beans>

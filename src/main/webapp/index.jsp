@@ -16,5 +16,8 @@
     <div>
         <a href="/research/BASE/index">BASE Transaction Test page</a><br>
     </div>
+    <div>
+        <a href="/research/drools/rule/index">Rule Setting Test page</a><br>
+    </div>
 </body>
 </html>

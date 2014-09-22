@@ -1,0 +1,12 @@
+package com.camel.drools.expert.sample.testbug2
+
+import mock.com.camel.drools.expert.sample.service.domain.Order;
+import mock.com.camel.drools.expert.sample.service.domain.RuleCondition;
+
+rule "order flow"
+when
+    $rc:RuleCondition($minPrice:minPrice,$source:source,$dest:dest)
+    $order:Order(price>$minPrice, source==$source, dest==$dest)
+then
+    System.out.println("finished rule for bug test 2" + $rc.getSource());
+end

@@ -1,0 +1,15 @@
+package com.camel.drools.expert.sample.simpleorder2
+
+import com.camel.drools.expert.sample.domain.Item;
+import com.camel.drools.expert.sample.domain.ERPCondition;
+
+global java.util.List relistingItems;
+
+rule "order control test"
+when
+    $b:ERPCondition($price:price, $saledNum:saledNum, $status:status)
+    $c:Item(price>$price)
+then
+    System.out.println("finished rule for order 2"+$c.getTitle());
+    relistingItems.add($c);
+end

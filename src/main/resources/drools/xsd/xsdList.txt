@@ -1,0 +1,3 @@
+## Listing all need registerd xsd file
+## one file per line
+/drools/xsd/ruleCondition.xsd

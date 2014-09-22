@@ -2,12 +2,17 @@ package mock.com.camel.drools.expert.sample.service;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
 import mockit.NonStrictExpectations;
 import mockit.Tested;
 
+import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
+import org.drools.compiler.compiler.DroolsParserException;
 import org.drools.compiler.rule.builder.RuleBuilder;
 import org.drools.core.definitions.InternalKnowledgePackage;
 import org.drools.core.impl.InternalKnowledgeBase;
@@ -120,6 +125,31 @@ public class EbayRelistingByRuleServiceMockTest {
         
         assertNotNull(itemLst);
         assertEquals(2,itemLst.size());
+        
+        //一条规则，执行多次
+        for (int i=1; i<=2; i++){
+            itemLst = ebayRelistingByRuleService.getEbayRelistingItemsByRule(kBase,facts,cond);
+        }
+        
+        //添加新规则
+        System.out.println("========add new rule=================");
+        final KnowledgeBuilderImpl builder = new KnowledgeBuilderImpl();
+        String drlFile = "/com/camel/drools/expert/sample/findEbayRelistingItems_2.drl";
+        final Reader drlReader = new InputStreamReader(this.getClass().getResourceAsStream(drlFile));
+        try {
+            builder.addPackageFromDrl(drlReader);
+            kBase.addPackage(builder.getPackage());
+        } catch (DroolsParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+      //一条规则，执行多次
+        for (int i=1; i<=2; i++){
+            itemLst = ebayRelistingByRuleService.getEbayRelistingItemsByRule(kBase,facts,cond);
+        }
+        
     }
     
     /**

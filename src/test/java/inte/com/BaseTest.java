@@ -12,8 +12,14 @@ import com.utils.AOPDynamicConfigurator.envparam.ConfigParamManager;
 import com.utils.AOPDynamicConfigurator.envparam.ConfigParamMap;
 import com.utils.AOPDynamicConfigurator.javassistaop.EnvConfigAOPManager;
 
+/**
+ * 不带事务的spring测试基类
+ * 
+ * @author dengqb
+ * @date 2014年8月25日
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:applicationContext.xml", "classpath:applicationContext-activemq.xml" })
+@ContextConfiguration({ "classpath:applicationContext-test.xml", "classpath:applicationContext-activemq-test.xml", "classpath:applicationContext-drools-test.xml" })
 @Ignore
 public class BaseTest extends AbstractJUnit4SpringContextTests {
 

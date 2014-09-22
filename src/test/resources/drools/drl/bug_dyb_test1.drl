@@ -1,0 +1,12 @@
+package com.camel.drools.expert.sample.testbug1
+
+import mock.com.camel.drools.expert.sample.service.domain.Order;
+import com.camel.drools.expert.sample.utils.CglibDynamicBeanGenerator;
+
+rule "order flow"
+when
+    $rc:CglibDynamicBeanGenerator()
+    $order:Order(price>(double)$rc.getValue("minPrice"), source==$rc.getValue("source"), dest==$rc.getValue("dest"))
+then
+    System.out.println("finished rule for bug test 1 " + $rc.getValue("source"));
+end

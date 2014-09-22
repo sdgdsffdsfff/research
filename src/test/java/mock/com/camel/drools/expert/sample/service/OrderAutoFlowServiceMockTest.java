@@ -14,6 +14,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import mockit.Tested;
 
@@ -28,15 +29,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.KnowledgeBaseFactory;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import com.camel.drools.expert.sample.domain.Item;
 import com.camel.drools.expert.sample.domain.Order;
-import com.camel.drools.expert.sample.domain.OrderAutoFlowRule;
+import com.camel.drools.expert.sample.domain.UserRule;
 import com.camel.drools.expert.sample.service.OrderAutoFlowService;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
 
@@ -70,8 +74,12 @@ public class OrderAutoFlowServiceMockTest {
      */
     @Test
     public void getFreeMarkerTemplateTest_Success() {
-        Configuration cfg = getFreeMarkerConfiguration();
-        Template temp = orderAutoFlowService.getTemplate(cfg,"orderAutoFlowRules.ftl");
+        String configFilePath = getClass().getResource("/").getPath();
+        System.out.println(configFilePath);
+        FreeMarkerConfigurer cfg = getFreeMarkerConfiguration();
+        ReflectionTestUtils.setField(orderAutoFlowService, "freemarkerConfig", cfg );
+        
+        Template temp = orderAutoFlowService.getTemplate("orderAutoFlowRules.dslr.ftl");
         assertNotNull(temp);
     }
 
@@ -81,34 +89,24 @@ public class OrderAutoFlowServiceMockTest {
      */
     @Test
     public void generDslrFromFtlFile_Success() {
-        Configuration cfg = getFreeMarkerConfiguration();
-        Template temp = orderAutoFlowService.getTemplate(cfg,"orderAutoFlowRules.ftl");
-        OrderAutoFlowRule oafr = new OrderAutoFlowRule();
-        oafr.setRuleName("order auto flow");
-        oafr.setCurrency("RMB");
-        oafr.setOrderAmount(99.00);
-        oafr.setOrderSource("ebay");
-        List<Integer> itemIds = new ArrayList<Integer>();
-        itemIds.add(1);
-        itemIds.add(2);
-        itemIds.add(5);
-        oafr.setItemIds(itemIds);
+        FreeMarkerConfigurer cfg = getFreeMarkerConfiguration();
+        ReflectionTestUtils.setField(orderAutoFlowService, "freemarkerConfig", cfg );
+        Template temp = orderAutoFlowService.getTemplate("orderAutoFlowRules.dslr.ftl");
+        UserRule userRule = createUserRule();
         
-        List<String> ruleExprs = new ArrayList<String>();
-        oafr.setRuleExpretions(ruleExprs);
-        
-        String drl = orderAutoFlowService.generDslrFromFtlFile(oafr,temp);
+        String drl = orderAutoFlowService.generDslrFromFtlFile(userRule,temp);
         assertNotNull(drl);
         System.out.println(drl);
     }
     
     @Test
     public void getDrlFromDslTest_Success(){
-        Configuration cfg = getFreeMarkerConfiguration();
-        Template temp = orderAutoFlowService.getTemplate(cfg,"orderAutoFlowRules.ftl");
-        OrderAutoFlowRule oafr = createOrderAutoFlowRule();
+        FreeMarkerConfigurer cfg = getFreeMarkerConfiguration();
+        ReflectionTestUtils.setField(orderAutoFlowService, "freemarkerConfig", cfg );
+        Template temp = orderAutoFlowService.getTemplate("orderAutoFlowRules.ftl");
+        UserRule userRule = createUserRule();
         
-        String dslr = orderAutoFlowService.generDslrFromFtlFile(oafr,temp);
+        String dslr = orderAutoFlowService.generDslrFromFtlFile(userRule,temp);
         
         assertTrue(dslr !=null);
         System.out.println(dslr);
@@ -128,13 +126,14 @@ public class OrderAutoFlowServiceMockTest {
      */
     @Test
     public void getKBaseTest_Success(){
-        Configuration cfg = getFreeMarkerConfiguration();
-        Template temp = orderAutoFlowService.getTemplate(cfg,"orderAutoFlowRules.ftl");
-        String dslr = orderAutoFlowService.generDslrFromFtlFile(createOrderAutoFlowRule(),temp);
+        FreeMarkerConfigurer cfg = getFreeMarkerConfiguration();
+        ReflectionTestUtils.setField(orderAutoFlowService, "freemarkerConfig", cfg );
+        Template temp = orderAutoFlowService.getTemplate("orderAutoFlowRules.ftl");
+        String dslr = orderAutoFlowService.generDslrFromFtlFile(createUserRule(),temp);
         
         final Reader dslrReader = new StringReader(dslr);
-        String dslFile = "/inte/com/camel/drools/expert/dynamic/orderAutoFlowRules.dsl";
-        final Reader dslReader = new InputStreamReader(this.getClass().getResourceAsStream(dslFile));
+        String dslFilePath = "/inte/com/camel/drools/expert/dynamic/orderAutoFlowRules.dsl";
+        final Reader dslReader = new InputStreamReader(this.getClass().getResourceAsStream(dslFilePath));
         String drlStr = orderAutoFlowService.getDrlFromDsl(dslrReader, dslReader);
         
         InternalKnowledgeBase kBase = orderAutoFlowService.createKBase(drlStr);
@@ -150,8 +149,9 @@ public class OrderAutoFlowServiceMockTest {
     public void executeRulesTest_Success(){
         OrderAutoFlowRule oafr = createOrderAutoFlowRule();
         
-        Configuration cfg = getFreeMarkerConfiguration();
-        Template temp = orderAutoFlowService.getTemplate(cfg,"orderAutoFlowRules.ftl");
+        FreeMarkerConfigurer cfg = getFreeMarkerConfiguration();
+        ReflectionTestUtils.setField(orderAutoFlowService, "freemarkerConfig", cfg );
+        Template temp = orderAutoFlowService.getTemplate("orderAutoFlowRules.ftl");
         String dslr = orderAutoFlowService.generDslrFromFtlFile(oafr,temp);
         
         final Reader dslrReader = new StringReader(dslr);
@@ -175,30 +175,19 @@ public class OrderAutoFlowServiceMockTest {
      * 创建OrderAutoFlowRule对象
      * @return
      */
-    private OrderAutoFlowRule createOrderAutoFlowRule(){
-        OrderAutoFlowRule oafr = new OrderAutoFlowRule();
-        oafr.setRuleName("order auto flow");
-        oafr.setCurrency("RMB");
-        oafr.setOrderAmount(99.00);
-        oafr.setOrderSource("ebay");
-        List<Integer> itemIds = new ArrayList<Integer>();
-        itemIds.add(1);
-        itemIds.add(2);
-        itemIds.add(3);
-        oafr.setItemIds(itemIds);
+    private UserRule createUserRule(){
+        UserRule userRule = new UserRule();
+        //userRule.setUserCode("cef");
+        userRule.setRuleName("order flow");
+        userRule.getRuleConditionMap().put("expr_104", 50);
+        userRule.getRuleConditionMap().put("expr_107", "ebay");
+        List<String> destIncludes = new ArrayList<String>();
+        destIncludes.add("china");
+        destIncludes.add("brazil");
+        destIncludes.add("US");
+        userRule.getRuleConditionMap().put("expr_109", destIncludes);
         
-        List<String> ruleExprs = new ArrayList<String>();
-//        ruleExprs.add("- binding currency condition to $currency");
-//        ruleExprs.add("- binding order amount condition to $orderAmount");
-//        ruleExprs.add("- binding order source condition to $orderSource");
-//        ruleExprs.add("- binding item id list condition to $itemIdList");
-        
-        ruleExprs.add("- currency is selective");
-        ruleExprs.add("- amount greater than selective");
-        ruleExprs.add("- order item id is in selective");
-        
-        oafr.setRuleExpretions(ruleExprs);
-        return oafr;
+        return userRule;
     }
     /**
      * 创建订单
@@ -216,39 +205,53 @@ public class OrderAutoFlowServiceMockTest {
         return order;
     }
     
-    private Configuration getFreeMarkerConfiguration() {
-        Configuration cfg = new Configuration();
-
-         // Specify the data source where the template files come from. Here I set a
-         // plain directory for it, but non-file-system are possible too:
-        URL url = OrderAutoFlowServiceMockTest.class.getResource("/");
-        String ftlFolder = url.toString()+"inte/com/camel/drools/expert/dynamic";
-        File ftlFolderFile = new File(ftlFolder);
-        System.out.println(ftlFolder);
-        File file = new File("src/test/resources/inte/com/camel/drools/expert/dynamic");
-         try {
-            cfg.setDirectoryForTemplateLoading(file);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+    private FreeMarkerConfigurer getFreeMarkerConfiguration() {
+        FreeMarkerConfigurer cfg = new FreeMarkerConfigurer();
+        Properties prop = new Properties();
+        prop.setProperty("locale", "zh_CN");
+        prop.setProperty("number_format", "#.####");
+        prop.setProperty("datetime_format", "yyyy-MM-dd");
+        prop.setProperty("date_format", "yyyy-MM-dd");
+        cfg.setFreemarkerSettings(prop);
+        cfg.setTemplateLoaderPath("inte/drools");
+        cfg.setDefaultEncoding("UTF-8");
+        try {
+            cfg.setConfiguration(cfg.createConfiguration());
+        } catch (IOException | TemplateException e) {
             e.printStackTrace();
         }
-    
-         // Specify how templates will see the data-model. This is an advanced topic...
-         // for now just use this:
-         cfg.setObjectWrapper(new DefaultObjectWrapper());
-    
-         // Set your preferred charset template files are stored in. UTF-8 is
-         // a good choice in most applications:
-         cfg.setDefaultEncoding("UTF-8");
-    
-         // Sets how errors will appear. Here we assume we are developing HTML pages.
-         // For production systems TemplateExceptionHandler.RETHROW_HANDLER is better.
-         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-    
-         // At least in new projects, specify that you want the fixes that aren't
-         // 100% backward compatible too (these are very low-risk changes as far as the
-         // 1st and 2nd version number remains):
-         cfg.setIncompatibleImprovements(new Version(2, 3, 20));  // FreeMarker 2.3.20 
+//        Configuration cfg = new Configuration();
+//
+//         // Specify the data source where the template files come from. Here I set a
+//         // plain directory for it, but non-file-system are possible too:
+//        URL url = OrderAutoFlowServiceMockTest.class.getResource("/");
+//        String ftlFolder = url.toString()+"inte/com/camel/drools/expert/dynamic";
+//        File ftlFolderFile = new File(ftlFolder);
+//        System.out.println(ftlFolder);
+//        File file = new File("src/test/resources/inte/com/camel/drools/expert/dynamic");
+//         try {
+//            cfg.setDirectoryForTemplateLoading(file);
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//    
+//         // Specify how templates will see the data-model. This is an advanced topic...
+//         // for now just use this:
+//         cfg.setObjectWrapper(new DefaultObjectWrapper());
+//    
+//         // Set your preferred charset template files are stored in. UTF-8 is
+//         // a good choice in most applications:
+//         cfg.setDefaultEncoding("UTF-8");
+//    
+//         // Sets how errors will appear. Here we assume we are developing HTML pages.
+//         // For production systems TemplateExceptionHandler.RETHROW_HANDLER is better.
+//         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+//    
+//         // At least in new projects, specify that you want the fixes that aren't
+//         // 100% backward compatible too (these are very low-risk changes as far as the
+//         // 1st and 2nd version number remains):
+//         cfg.setIncompatibleImprovements(new Version(2, 3, 20));  // FreeMarker 2.3.20 
         return cfg;
     }
 }
