@@ -49,6 +49,10 @@ public class DynamicAddRuleBugTest {
     public void tearDown() throws Exception {
     }
 
+    /**
+     * using pre-write RuleCondition Object
+     * result: fine
+     */
     @Test
     public void testReproduceBug() {
         InternalKnowledgeBase kBase = (InternalKnowledgeBase) KnowledgeBaseFactory.newKnowledgeBase();
@@ -88,6 +92,10 @@ public class DynamicAddRuleBugTest {
         kieSession.dispose();
     }
 
+    /**
+     * using a RuleConditonSdo object, it is dynamically created by SDO technic
+     * result: false
+     */
     @Test
     public void testReproduceBugWithSDO() {
         InternalKnowledgeBase kBase = (InternalKnowledgeBase) KnowledgeBaseFactory.newKnowledgeBase();
@@ -140,6 +148,11 @@ public class DynamicAddRuleBugTest {
         kieSession.dispose();
     }
     
+    /**
+     * using a dynamicl RuleCondition object, it created by cglib BeanGenerator
+     * result: fine
+     * @throws ClassNotFoundException
+     */
     @Test
     public void testReproduceBugWithDynamicBean() throws ClassNotFoundException{
         InternalKnowledgeBase kBase = (InternalKnowledgeBase) KnowledgeBaseFactory.newKnowledgeBase();
