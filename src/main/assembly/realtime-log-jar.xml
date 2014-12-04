@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/assembly-1.0.0.xsd">
+  <!-- TODO: a jarjar format would be better -->
+  <id>realtime-log-1.0.0-Release</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <includes>
+      	<include>com/camel/realtimelog/**</include>
+        <include>com/camel/utils/**</include>
+      </includes>
+      <!-- <excludes>
+      	<exclude>com/utils/AOPDynamicConfigurator/cglibaop/**</exclude>
+      	<exclude>com/utils/AOPDynamicConfigurator/listener/**</exclude>
+      </excludes> -->
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <!-- includes some dependency jar which needed at runtime-->
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>/</outputDirectory>
+      <unpack>true</unpack>
+      <scope>runtime</scope>
+      <includes>
+        <include>org.mongodb:mongo-java-driver</include>
+        <include>log4j:log4j</include>
+      </includes>
+      <!-- <excludes>
+        <exclude>junit:junit</exclude>
+        <exclude>commons-lang:commons-lang</exclude>
+        <exclude>commons-logging:commons-logging</exclude>
+        <exclude>commons-cli:commons-cli</exclude>
+        <exclude>jsch:jsch</exclude>
+        <exclude>org.apache.maven.wagon:wagon-ssh</exclude>
+      </excludes> -->
+    </dependencySet>
+  </dependencySets>
+  
+</assembly>

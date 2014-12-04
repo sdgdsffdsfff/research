@@ -26,6 +26,7 @@
         <mybatis.version>3.2.5</mybatis.version>
         <mybatis-spring.version>1.2.1</mybatis-spring.version>
         <spring-data-mongodb.version>1.4.0.RELEASE</spring-data-mongodb.version>
+        <mongo-java.version>2.12.4</mongo-java.version>
         
         <freemarker.version>2.3.20</freemarker.version>
         <!-- jmockit test -->
@@ -38,6 +39,7 @@
         <eclipselink.version>2.5.2-M1</eclipselink.version>
         
         <jetty.version>9.1.0.v20131115</jetty.version>
+        <java.mail.version>1.5.0-b01</java.mail.version>
 	</properties>
 	<dependencies>
        <dependency>
@@ -288,6 +290,11 @@
           <version>${freemarker.version}</version>
         </dependency>
         
+        <dependency>
+          <groupId>org.mongodb</groupId>
+          <artifactId>mongo-java-driver</artifactId>
+          <version>${mongo-java.version}</version>
+        </dependency>
         <!-- =============sdo相关jar======================= -->
             <dependency>
                 <groupId>org.eclipse.persistence</groupId>
@@ -299,7 +306,13 @@
                 <artifactId>eclipselink</artifactId>
                 <version>${eclipselink.version}</version>
             </dependency>
+            <dependency>
+              <groupId>javax.mail</groupId>
+              <artifactId>mail</artifactId>
+              <version>${java.mail.version}</version>
+            </dependency>
 	</dependencies>
+    
 	<build>
 		<plugins>
 			<plugin>
@@ -344,4 +357,48 @@
             </plugin>
 		</plugins>
 	</build>
+    <profiles>
+        <profile>
+            <id>realtime-log</id>
+            <build>
+                <defaultGoal>assembly:assembly</defaultGoal>
+                <plugins>
+                    <plugin>  
+                      <groupId>org.apache.maven.plugins</groupId>  
+                      <artifactId>maven-jar-plugin</artifactId>  
+                      <configuration>  
+                        <archive>
+                        <!-- <manifestFile>
+                            src/main/resources/META-INF/MANIFEST.MF
+                        </manifestFile> -->
+                          <manifest>
+                            <!-- <addClasspath>true</addClasspath>  
+                            <classpathPrefix>lib/</classpathPrefix>   -->
+                            <mainClass>
+                                com.camel.realtimelog.FileIdentification
+                            </mainClass>
+                          </manifest>  
+                        </archive>  
+                      </configuration>  
+                    </plugin>  
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>2.3.2</version>
+                        <configuration>
+                            <source>1.7</source>
+                            <target>1.7</target>
+                            <encoding>UTF-8</encoding>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>2.2-beta-2</version>
+                        <configuration>
+                          <descriptor>src/main/assembly/realtime-log-jar.xml</descriptor>
+                        </configuration>
+                      </plugin>
+                </plugins>
+            </build>
+        </profile>
+      </profiles>
 </project>

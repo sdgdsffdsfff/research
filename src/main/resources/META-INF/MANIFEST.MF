@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: 24.45-b08 (Oracle Corporation)
+Main-Class: com.camel.realtimelog.FileIdentification

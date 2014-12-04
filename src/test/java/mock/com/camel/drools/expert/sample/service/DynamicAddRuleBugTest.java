@@ -104,7 +104,7 @@ public class DynamicAddRuleBugTest {
         
         Order order = new Order(50,"ebay","china");
         
-      //注册sdo对象
+        //注册sdo对象
         RegisterSDOXsd register = new RegisterSDOXsd();
         register.setXsdFilePath("/drools/xsd/xsdList.txt");
         register.register();
