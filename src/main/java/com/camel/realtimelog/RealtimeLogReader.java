@@ -153,6 +153,8 @@ public class RealtimeLogReader {
                             RealtimeLogReader.logger.debug(cfg.getFilePath() + " first time run this app.");
                         } else {
                             cfg.setLastReadFileId(currentFileId);
+                            //更新标记文件mark file
+                            writeLogMarkPropertes(cfg, markProps);
                             logger.debug(cfg.getFilePath()
                                     + " log file has backed up, break current operation. waiting 10 secs to rerun");
                             return;
@@ -261,12 +263,9 @@ public class RealtimeLogReader {
                         if (errorMap.size() > 0) {
                             mongo.saveAll(new ArrayList<DBObject>(errorMap.values()));
                         }
+                        
                         // 2.并且更新标记文件mark file
-                        markProps.setProperty(KEY_LASTTIME_FILE_SIZE + cfg.getId(),
-                                String.valueOf(cfg.getLastReadFileSize()));
-                        markProps.setProperty(KEY_LASTTIME_FILE_ID + cfg.getId(), cfg.getLastReadFileId() == null ? ""
-                                : cfg.getLastReadFileId());
-                        FileUtils.writeProperties(markFilePath, markProps);
+                        writeLogMarkPropertes(cfg, markProps);
                     } catch (Exception e) {
                         logger.error("save operation exception. errorMap size=" + errorMap.size(), e);
                         e.printStackTrace();
@@ -315,6 +314,19 @@ public class RealtimeLogReader {
             logObj.put("logLevel", matcher.group(2));
         }
         return logObj;
+    }
+
+    /**
+     * 标记更新logmark文件
+     * @param cfg
+     * @param markProps
+     */
+    private void writeLogMarkPropertes(final LogFileConfiguration cfg, Properties markProps) {
+        markProps.setProperty(KEY_LASTTIME_FILE_SIZE + cfg.getId(),
+                String.valueOf(cfg.getLastReadFileSize()));
+        markProps.setProperty(KEY_LASTTIME_FILE_ID + cfg.getId(), cfg.getLastReadFileId() == null ? ""
+                : cfg.getLastReadFileId());
+        FileUtils.writeProperties(markFilePath, markProps);
     }
 
     /**
