@@ -174,6 +174,8 @@ public class RealtimeLogReader {
                     if (randomFile.length() == cfg.getLastReadFileSize()) {
                         // 相等表示日志无变化，不需要处理
                         logger.debug(cfg.getFilePath() + " log file has not changed");
+                        //修复open too many file 问题
+                        randomFile.close();
                         return;
                     } else if (randomFile.length() < cfg.getLastReadFileSize()) {
                         // 文件大小小于上次读取的大小，表示异常，重新开始读取
