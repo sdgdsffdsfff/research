@@ -167,12 +167,20 @@ public class FileUtils {
         return file.exists();
     }
     
+    public static String getFileAbsolutePath()
+    {
+      return getFileAbsolutePath(null);
+    }
+    
     /**
      * 获取应用的绝对路径
      * @return
      */
-    public static String getFileAbsolutePath(){
-        URL url = FileUtils.class.getProtectionDomain().getCodeSource().getLocation();
+    public static String getFileAbsolutePath(Class clazz){
+        if (clazz == null) {
+            clazz = FileUtils.class;
+          }
+        URL url = clazz.getProtectionDomain().getCodeSource().getLocation();
         String filePath = null;
         try {
             filePath = URLDecoder.decode(url.getPath(), "UTF-8");

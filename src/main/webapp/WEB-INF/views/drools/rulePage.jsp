@@ -17,7 +17,9 @@
                     <input type="text" name="expr_107" >
                 </li>
                 <li>订单金额：
+                    <input type="checkbox" name="isLeft" >
                     <input type="text" name="expr_104" >
+                    <input>
                 </li>
                 <li>目的国家包含：
                     <input type="text" name="expr_109" >
