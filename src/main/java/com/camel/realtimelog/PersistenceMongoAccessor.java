@@ -5,6 +5,7 @@
 package com.camel.realtimelog;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,8 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 
 /**
  * 
@@ -28,21 +31,29 @@ public class PersistenceMongoAccessor implements IPersistenceAdapter {
     private String serverAddress;
     private String dbName;
     private String collectionName;
+    private String username;
+    private String password;
     private static MongoClient mongo;
     private static DB db;
     private static DBCollection logs;
     
-    public PersistenceMongoAccessor(String serverAddress, String dbName, String collectionName){
+    public PersistenceMongoAccessor(String serverAddress, String dbName, String collectionName, String username, String password){
         this.serverAddress = serverAddress;
         this.dbName = dbName;
         this.collectionName = collectionName;
+        this.username = username;
+        this.password = password;
         setMongoClient();
     }
     
     private void setMongoClient (){
         if (mongo == null){
             try {
-                mongo = new MongoClient(serverAddress);
+                ServerAddress sa = new ServerAddress(serverAddress);
+                MongoCredential mc = MongoCredential.createMongoCRCredential(username, dbName,password.toCharArray());
+                List<MongoCredential> mcs = new ArrayList<MongoCredential>();
+                mcs.add(mc);
+                mongo = new MongoClient(sa, mcs);
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }

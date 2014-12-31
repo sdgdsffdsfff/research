@@ -152,9 +152,9 @@ public class JDKHttpsClient {
                 SSLContext ctx = SSLContext.getInstance("TLS");
                 ctx.init(null, new TrustManager[] { new DefaultTrustManager() }, new SecureRandom());
                 //SSLContext.setDefault(ctx);
-
                 conn = getConnection(new URL(url), METHOD_POST, ctype);
                 conn.setSSLSocketFactory(ctx.getSocketFactory());
+                
                 conn.setRequestProperty("Cookie", cookieStr);
                 conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
                 conn.setConnectTimeout(connectTimeout);

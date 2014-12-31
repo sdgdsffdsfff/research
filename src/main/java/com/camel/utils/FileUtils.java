@@ -167,11 +167,14 @@ public class FileUtils {
         return file.exists();
     }
     
-    public static String getFileAbsolutePath()
-    {
-      return getFileAbsolutePath(null);
+    /**
+     * 获取应用的绝对路径
+     * @return
+     */
+    public static String getFileAbsolutePath() {
+        return getFileAbsolutePath(null);
     }
-    
+
     /**
      * 获取应用的绝对路径
      * @return

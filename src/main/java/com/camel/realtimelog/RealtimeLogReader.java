@@ -108,7 +108,8 @@ public class RealtimeLogReader {
 
         // 数据库访问对象
         final IPersistenceAdapter mongo = new PersistenceMongoAccessor(config.getProperty("db.ip"),
-                config.getProperty("db.name"), config.getProperty("db.coll.name"));
+                config.getProperty("db.name"), config.getProperty("db.coll.name"),
+                config.getProperty("db.username"),config.getProperty("db.password"));
 
         // 启动一个线程每10秒钟读取新增的日志信息
         ScheduledExecutorService exec = Executors.newScheduledThreadPool(logFileConfigs.size());
