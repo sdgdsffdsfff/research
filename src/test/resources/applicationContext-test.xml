@@ -60,5 +60,6 @@
 
 	<task:annotation-driven/>
     
-    <import resource="applicationContext-drools-test.xml"/>
+    <!-- <import resource="applicationContext-drools-test.xml"/> -->
+    <import resource="applicationContext-activiti-test.xml"/>
 </beans>

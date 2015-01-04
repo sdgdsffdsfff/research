@@ -12,7 +12,7 @@
 			<jdbc>
 				<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 				<property name="system" value="CEC"/>
-				<property name="url" value="jdbc:mysql://172.16.30.54:3306/db_cec2?useUnicode=true&amp;characterEncoding=utf-8"/>
+				<property name="url" value="jdbc:mysql://172.16.30.54:3306/activiti_test?useUnicode=true&amp;characterEncoding=utf-8"/>
 				<property name="username" value="root"/>
 				<property name="password" value="111111"/>
 			</jdbc>

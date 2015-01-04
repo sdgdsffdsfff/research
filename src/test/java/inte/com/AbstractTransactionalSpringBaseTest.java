@@ -20,7 +20,7 @@ import com.utils.AOPDynamicConfigurator.javassistaop.EnvConfigAOPManager;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration(transactionManager="transactionManager",defaultRollback = false)
-@ContextConfiguration(locations = { "classpath:applicationContext-test.xml", "classpath:applicationContext-activemq-test.xml" })
+@ContextConfiguration(locations = { "classpath:applicationContext-test.xml" })
 public class AbstractTransactionalSpringBaseTest extends AbstractTransactionalJUnit4SpringContextTests {
     
     @BeforeClass
