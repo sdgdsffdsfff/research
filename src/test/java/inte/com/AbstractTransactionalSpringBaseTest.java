@@ -20,7 +20,7 @@ import com.utils.AOPDynamicConfigurator.javassistaop.EnvConfigAOPManager;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration(transactionManager="transactionManager",defaultRollback = false)
-@ContextConfiguration(locations = { "classpath:applicationContext-test.xml" })
+@ContextConfiguration(locations = { "classpath:applicationContext-test.xml", "classpath:applicationContext-activiti-test.xml"})
 public class AbstractTransactionalSpringBaseTest extends AbstractTransactionalJUnit4SpringContextTests {
     
     @BeforeClass
@@ -29,6 +29,7 @@ public class AbstractTransactionalSpringBaseTest extends AbstractTransactionalJU
         cpm.readConfig();
         
         EnvConfigAOPManager.initAOP();
+        System.out.println(ConfigParamMap.getValue("jdbc.url"));
         System.out.println("active.mq.cec.wmc.order="+ConfigParamMap.getValue("active.mq.cec.wmc.order"));
     }
 }

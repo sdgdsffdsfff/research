@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:task="http://www.springframework.org/schema/task" 
     xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/task  
+        http://www.springframework.org/schema/task/spring-task-4.0.xsd
         http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
-    default-autowire="byName">
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
     <description>Activiti配置</description>
+    
+    <!-- 将需要加入事物管理的且标注为@Service的类放在这里扫描获取，放在servlet-context.xml内和controller一起扫描将不会加入事物 -->
+    <context:component-scan base-package="com.camel.activiti">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    
+    <task:annotation-driven/>
     
     <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
         <property name="dataSource" ref="dataSource" />
         <property name="transactionManager" ref="transactionManager" />
         <property name="databaseSchemaUpdate" value="true" />
-        <property name="jobExecutorActivate" value="false" />
+        <property name="jobExecutorActivate" value="true" />
     </bean>
     
     <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
@@ -29,4 +38,6 @@
     <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
     <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService" />
     <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService" />
+    
+    
 </beans>

@@ -2,6 +2,7 @@ package mock.com.camel.regex;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,5 +67,13 @@ public class RegexTest {
         matcher.find();
         System.out.println(matcher.group(2));
         assertTrue(matcher.groupCount() > 0);
+    }
+    
+    @Test
+    public void String2Array(){
+        String temp = "D:/a/b/c";
+        String[] arrs = temp.split("\\"+File.separator);
+        System.out.println(arrs);
+        assertTrue(arrs.length == 4);
     }
 }

@@ -8,7 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>4.0.0.RELEASE</spring.version>
+		<spring.version>4.0.6.RELEASE</spring.version>
 		<jackson.version>2.1.1</jackson.version>
         <servlet.version>3.0.1</servlet.version>
         <jsp-api.version>2.2</jsp-api.version>
@@ -41,8 +41,11 @@
         <jetty.version>9.1.0.v20131115</jetty.version>
         <java.mail.version>1.5.0-b01</java.mail.version>
         <perf4j.version>0.9.16</perf4j.version>
-        
         <activiti-engine.version>5.16.4</activiti-engine.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        
+        <aspectjweaver.version>1.8.3</aspectjweaver.version>
+        <cglib.version>3.1</cglib.version>
 	</properties>
 	<dependencies>
        <dependency>
@@ -123,6 +126,7 @@
               <artifactId>commons-dbcp</artifactId>
               <version>${commons-dbcp.version}</version>
             </dependency>
+            <!-- ===============spring 配置================== -->
         <dependency>
           <groupId>org.springframework</groupId>
           <artifactId>spring-webmvc</artifactId>
@@ -142,6 +146,17 @@
           <groupId>org.springframework</groupId>
           <artifactId>spring-context-support</artifactId>
           <version>${spring.version}</version>
+        </dependency>
+        <!-- =============spring aspect注解支持================= -->
+        <dependency>
+          <groupId>org.aspectj</groupId>
+          <artifactId>aspectjweaver</artifactId>
+          <version>${aspectjweaver.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>cglib</groupId>
+          <artifactId>cglib-nodep</artifactId>
+          <version>${cglib.version}</version>
         </dependency>
         <!-- =============spring 支持websocket ======================= -->
         <dependency>
@@ -240,6 +255,16 @@
             <version>${jmockit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-library</artifactId>
+          <version>${hamcrest.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-core</artifactId>
+          <version>${hamcrest.version}</version>
+        </dependency>
 		<!-- ################## Junit dependancy end ################## -->
 		<!-- aop dependancy start -->
 		<dependency>
@@ -324,6 +349,11 @@
             <dependency>
               <groupId>org.activiti</groupId>
               <artifactId>activiti-engine</artifactId>
+              <version>${activiti-engine.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.activiti</groupId>
+              <artifactId>activiti-spring</artifactId>
               <version>${activiti-engine.version}</version>
             </dependency>
 	</dependencies>

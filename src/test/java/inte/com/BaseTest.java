@@ -19,7 +19,7 @@ import com.utils.AOPDynamicConfigurator.javassistaop.EnvConfigAOPManager;
  * @date 2014年8月25日
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:applicationContext-test.xml", "classpath:applicationContext-activemq-test.xml", "classpath:applicationContext-drools-test.xml" })
+@ContextConfiguration({ "classpath:applicationContext-test.xml", "classpath:applicationContext-newservicearch-test.xml" })
 @Ignore
 public class BaseTest extends AbstractJUnit4SpringContextTests {
 

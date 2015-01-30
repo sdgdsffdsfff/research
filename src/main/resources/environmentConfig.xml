@@ -30,13 +30,13 @@
         <config name="jdbc.driver" value="com.mysql.jdbc.Driver" remakr="数据库驱动"/>
 		<config name="jdbc.schema" value="cec_db" remark="数据库schema" />
 
-		<!-- <config name="jdbc.url" value="jdbc:mysql://172.16.30.43:3306/db_cec2?useUnicode=true&amp;characterEncoding=utf-8" remark="数据连接url" />
+		<config name="jdbc.url" value="jdbc:mysql://172.16.30.54:3306/activiti_test?useUnicode=true&amp;characterEncoding=utf-8" remark="数据连接url" />
 		<config name="jdbc.user" value="root" remark="数据库用户" />
-		<config name="jdbc.password" value="111111" remark="数据库密码" /> -->
+		<config name="jdbc.password" value="111111" remark="数据库密码" />
         
-        <config name="jdbc.url" value="jdbc:mysql://192.168.137.128:3306/activemq?useUnicode=true&amp;characterEncoding=utf-8" remark="数据连接url" />
+        <!-- <config name="jdbc.url" value="jdbc:mysql://192.168.137.128:3306/activemq?useUnicode=true&amp;characterEncoding=utf-8" remark="数据连接url" />
         <config name="jdbc.user" value="activemq" remark="数据库用户" />
-        <config name="jdbc.password" value="activemq" remark="数据库密码" />
+        <config name="jdbc.password" value="activemq" remark="数据库密码" /> -->
         
         <config name="active.mq.url" value="tcp://192.168.137.128:61616" remark="MQ URL" />
         <!-- <config name="active.mq.url" value="tcp://172.16.30.85:61616" remark="MQ URL" /> -->

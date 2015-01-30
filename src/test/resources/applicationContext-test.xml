@@ -51,15 +51,7 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
-	 
-	<!-- 将需要加入事物管理的且标注为@Service的类放在这里扫描获取，放在servlet-context.xml内和controller一起扫描将不会加入事物 -->
-    <context:component-scan base-package="com.camel">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
-
-	<task:annotation-driven/>
     
     <!-- <import resource="applicationContext-drools-test.xml"/> -->
-    <import resource="applicationContext-activiti-test.xml"/>
+    <!-- <import resource="applicationContext-activiti-test.xml"/> -->
 </beans>
