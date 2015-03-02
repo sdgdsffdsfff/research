@@ -40,8 +40,9 @@
 	
 	<root>
         <level value="DEBUG" />
+        <!--
 		<appender-ref ref="console" />
-        <!-- <appender-ref ref="DEBUG_FILE" /> -->
+         <appender-ref ref="DEBUG_FILE" /> -->
         <!-- <appender-ref ref="ERROR_FILE" /> -->
 	</root>
 	

@@ -2,13 +2,14 @@
  * Copyright (c) 2013, FPX and/or its affiliates. All rights reserved.
  * Use, Copy is subject to authorized license.
  */
-package com.camel.newservicearch.action;
+package com.camel.newservicearch.activity;
 
 import javax.annotation.Resource;
 
 import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Component;
 
+import com.camel.newservicearch.action.IBaseOrderAction;
 import com.camel.newservicearch.aop.annotation.Execute;
 import com.camel.newservicearch.domain.ActionResponse;
 import com.camel.newservicearch.domain.Order;
@@ -19,7 +20,7 @@ import com.camel.newservicearch.domain.Order;
  * @date 2015年1月16日
  */
 @Component
-public class DataValidationGroupAction implements IBaseOrderAction {
+public class DataValidationActivity implements IBaseOrderAction {
     @Resource(name="SKUValidationAction")
     private IBaseOrderAction skuValidationAction;
     @Resource(name="addressValidationAction")

@@ -9,12 +9,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.camel.newservicearch.controlflow.ControlFlow;
 import com.camel.newservicearch.domain.Order;
 import com.camel.newservicearch.service.OrderProcessService;
 
 public class OrderProcessServiceTest extends BaseTest {
     @Resource
     private OrderProcessService orderProcessService;
+    
+    @Resource
+    private ControlFlow controlFlow;
     
     @After
     public void tearDown() throws Exception {
@@ -30,7 +34,8 @@ public class OrderProcessServiceTest extends BaseTest {
         order.setSkuNum(10);
         order.setTitle("this is test order");
         
-        orderProcessService.orderProcess(order);
+        //orderProcessService.orderProcess(order);
+        controlFlow.orderProcess(order);
     }
 
 }
