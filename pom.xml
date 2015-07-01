@@ -22,6 +22,7 @@
         <commons-net.version>3.2</commons-net.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <httpclient.version>4.2.5</httpclient.version>
+        <okhttp.version>2.2.0</okhttp.version>
         
         <mybatis.version>3.2.5</mybatis.version>
         <mybatis-spring.version>1.2.1</mybatis-spring.version>
@@ -355,6 +356,25 @@
               <groupId>org.activiti</groupId>
               <artifactId>activiti-spring</artifactId>
               <version>${activiti-engine.version}</version>
+            </dependency>
+            
+            <!-- http client -->
+            <dependency>
+              <groupId>com.squareup.okhttp</groupId>
+              <artifactId>okhttp</artifactId>
+              <version>${okhttp.version}</version>
+            </dependency>
+            <!-- json lib for xml json exchanger -->
+            <dependency>
+              <groupId>net.sf.json-lib</groupId>
+              <artifactId>json-lib</artifactId>
+              <version>2.4</version>
+              <classifier>jdk15</classifier>
+            </dependency>
+            <dependency>
+              <groupId>xom</groupId>
+              <artifactId>xom</artifactId>
+              <version>1.2.5</version>
             </dependency>
 	</dependencies>
     

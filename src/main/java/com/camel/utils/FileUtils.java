@@ -84,6 +84,30 @@ public class FileUtils {
     }
     
     /**
+     * 追加写入文件
+     * @param file
+     * @param content
+     */
+    public static void writeAppendFile(File file, String content){
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(file, true);
+            fw.append(content);
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally{
+            try{
+                if (fw != null){
+                    fw.close();
+                }
+            }catch (IOException e){
+                
+            }
+        }
+    }
+    
+    /**
      * 读取property属性文件
      * @param filePath
      * @return

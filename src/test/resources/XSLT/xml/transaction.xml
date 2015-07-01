@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+ <transaction>
+    <transId>123</transId>
+    <transNo>abc</transNo>
+    <totalPrice></totalPrice>
+    <orders>
+        <order>
+            <productName>necklack</productName>
+            <sellPrice>18</sellPrice>
+            <quantity>1</quantity>
+        </order>
+        <order>
+            <productName>earring</productName>
+            <sellPrice>21</sellPrice>
+            <quantity>2</quantity>
+        </order>
+    </orders>
+    <consignee>
+        <name></name>
+        <address></address>
+        <postCode></postCode>
+    </consignee>
+ </transaction>

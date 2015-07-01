@@ -13,7 +13,7 @@ import com.camel.newservicearch.domain.ActionResponse;
 import com.camel.newservicearch.domain.Order;
 
 /**
- * 整个活动控制流程
+ * 整个活动控制流程，用于替代OrderProcessService
  * @author dengqb
  * @date 2015年2月9日
  */

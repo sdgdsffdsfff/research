@@ -4,6 +4,9 @@
  */
 package com.camel.activemq.BASE;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -58,6 +61,14 @@ public class QueueServiceImpl implements IQueueService{
         throw new RuntimeException("break down send msg : " + message);
         //producerJmsTemplate.send(testBaseQueueName, new DemoMessageCreator(message));
     };
+    
+    /**
+     * 通过java queue写入数据库，查看是否能保持事务一致性
+     */
+    public void sendMessageOverJavaQueue (){
+        BlockingQueue<String> bq = new ArrayBlockingQueue(50);
+        
+    }
     
     private class DemoMessageCreator implements MessageCreator {
         private String msg;

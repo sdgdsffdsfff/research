@@ -1,0 +1,22 @@
+{
+  "transId": "123",
+  "transNo": "abc",
+  "totalPrice": [],
+  "orders": [
+    {
+      "productName": "necklack",
+      "sellPrice": "18",
+      "quantity": "1"
+    },
+    {
+      "productName": "earring",
+      "sellPrice": "21",
+      "quantity": "2"
+    }
+  ],
+  "consignee": {
+    "name": [],
+    "address": [],
+    "postCode": []
+  }
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- 
+   操作名                 说明                   是否必填
+   ======================================================
+   action                  操作名                必填
+   xlstReqPath  请求的xsl文件classpath路径         可选
+   xlstRespPath 响应的xsl文件classpath路径         可选
+   httpMethod   请求的HTTP方法,GET POST PUT等      必填
+   url          请求的url                         必填
+   
+   请求 Item节点必须指定xml命名空间及类型
+ -->
+ 
+<items>
+    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="httpResourceBean">
+        <!-- 创建并预报订单 -->
+        <action>createBookingOrder</action>
+        <xlstReqPath>/xsl/xoms/CreateBookingOrderReq.xsl</xlstReqPath>
+        <xlstRespPath>/xsl/xoms/CreateBookingOrderResp.xsl</xlstRespPath>
+        <httpMethod>POST</httpMethod>
+        <url>/api/service/orderonline/createAndPreAlertOrder</url>
+    </item>
+    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="httpResourceBean">
+        <!-- 删除预报订单 -->
+        <action>removeBookingOrder</action>
+        <xlstReqPath>/xsl/xoms/RemoveBookingOrderReq.xsl</xlstReqPath>
+        <xlstRespPath>/xsl/xoms/RemoveBookingOrderResp.xsl</xlstRespPath>
+        <httpMethod>POST</httpMethod>
+        <url>/api/service/orderonline/removeOrder</url>
+    </item>
+    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="httpResourceBean">
+        <action>getLabelInfo</action>
+        <xlstReqPath>/xsl/xoms/GetLabelInfoReq.xsl</xlstReqPath>
+        <xlstRespPath>/xsl/xoms/GetLabelInfoResp.xsl</xlstRespPath>
+        <httpMethod>POST</httpMethod>
+        <url>/api/service/orderonline/findLabelInfo</url>
+    </item>
+    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="httpResourceBean">
+        <action>getProduct</action>
+        <xlstReqPath></xlstReqPath>
+        <xlstRespPath>/xsl/xoms/GetProductResp.xsl</xlstRespPath>
+        <httpMethod>GET</httpMethod>
+        <url>/api/service/basicdata/product</url>
+    </item>
+    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="httpResourceBean">
+        <action>getDeliveryzone</action>
+        <xlstReqPath></xlstReqPath>
+        <xlstRespPath>/xsl/xoms/GetDeliveryzoneResp.xsl</xlstRespPath>
+        <httpMethod>GET</httpMethod>
+        <url>/api/service/basicdata/deliveryzone</url>
+    </item>
+    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="httpResourceBean">
+        <action>getReturnAddress</action>
+        <xlstReqPath></xlstReqPath>
+        <xlstRespPath>/xsl/xoms/GetReturnAddressResp.xsl</xlstRespPath>
+        <httpMethod>GET</httpMethod>
+        <url>/api/service/basicdata/returnaddress</url>
+    </item>
+    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="httpResourceBean">
+        <action>getCurrencyRate</action>
+        <xlstReqPath></xlstReqPath>
+        <xlstRespPath>/xsl/xoms/GetCurrencyRateResp.xsl</xlstRespPath>
+        <httpMethod>GET</httpMethod>
+        <url>/api/service/basicdata/currencyrate</url>
+    </item>
+    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="httpResourceBean">
+        <action>getCustomTaxStart</action>
+        <xlstReqPath></xlstReqPath>
+        <xlstRespPath>/xsl/xoms/GetCustomTaxStartResp.xsl</xlstRespPath>
+        <httpMethod>GET</httpMethod>
+        <url>/api/service/basicdata/taxstart</url>
+    </item>
+    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="httpResourceBean">
+        <action>authorization</action>
+        <xlstReqPath>/xsl/xoms/AuthorizationReq.xsl</xlstReqPath>
+        <xlstRespPath>/xsl/xoms/AuthorizationResp.xsl</xlstRespPath>
+        <httpMethod>POST</httpMethod>
+        <url>/api/service/customer/authorize</url>
+    </item>
+</items>
